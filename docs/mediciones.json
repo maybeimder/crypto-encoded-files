@@ -1,0 +1,209 @@
+{
+  "block_size_overhead_file_size": 104857600,
+  "crypto_throughput": [
+    {
+      "file_size_bytes": 0,
+      "blocks": 1,
+      "encrypt_seconds": 0.0007528516666610585,
+      "encrypt_stdev_seconds": 0.0007866741359543014,
+      "encrypt_mib_per_second": null,
+      "decrypt_seconds": 0.0007848096666644248,
+      "decrypt_stdev_seconds": 0.00010782223835186742,
+      "decrypt_mib_per_second": null
+    },
+    {
+      "file_size_bytes": 1024,
+      "blocks": 1,
+      "encrypt_seconds": 0.00026394933332577847,
+      "encrypt_stdev_seconds": 5.251529778892261e-05,
+      "encrypt_mib_per_second": null,
+      "decrypt_seconds": 0.000774572333336702,
+      "decrypt_stdev_seconds": 0.00013947179962840926,
+      "decrypt_mib_per_second": null
+    },
+    {
+      "file_size_bytes": 1048576,
+      "blocks": 1,
+      "encrypt_seconds": 0.003353590666672327,
+      "encrypt_stdev_seconds": 0.0008307531588901658,
+      "encrypt_mib_per_second": 298.1878527805755,
+      "decrypt_seconds": 0.004212117000003938,
+      "decrypt_stdev_seconds": 0.000877808641488432,
+      "decrypt_mib_per_second": 237.41030935253343
+    },
+    {
+      "file_size_bytes": 10485760,
+      "blocks": 10,
+      "encrypt_seconds": 0.028964723000001413,
+      "encrypt_stdev_seconds": 0.003698042953639782,
+      "encrypt_mib_per_second": 345.24756200843046,
+      "decrypt_seconds": 0.030857965999999237,
+      "decrypt_stdev_seconds": 0.0018474657713365443,
+      "decrypt_mib_per_second": 324.06542932869417
+    },
+    {
+      "file_size_bytes": 52428800,
+      "blocks": 50,
+      "encrypt_seconds": 0.1217996180000019,
+      "encrypt_stdev_seconds": 0.01789014866721692,
+      "encrypt_mib_per_second": 410.51031867767614,
+      "decrypt_seconds": 0.12432709466666836,
+      "decrypt_stdev_seconds": 0.00708849651518633,
+      "decrypt_mib_per_second": 402.16495152608775
+    },
+    {
+      "file_size_bytes": 104857600,
+      "blocks": 100,
+      "encrypt_seconds": 0.24568190933333747,
+      "encrypt_stdev_seconds": 0.02959393739534426,
+      "encrypt_mib_per_second": 407.0303762753713,
+      "decrypt_seconds": 0.25823770633333254,
+      "decrypt_stdev_seconds": 0.030923820293261836,
+      "decrypt_mib_per_second": 387.2401184934638
+    }
+  ],
+  "block_size_overhead": [
+    {
+      "block_size_bytes": 65536,
+      "blocks": 1600,
+      "tag_bytes": 25600,
+      "manifest_bytes": 107791,
+      "overhead_bytes": 133391,
+      "overhead_bytes_per_block": 83.369375,
+      "overhead_percent": 0.1272115707397461,
+      "encrypt_seconds": 0.2275803743333332
+    },
+    {
+      "block_size_bytes": 262144,
+      "blocks": 400,
+      "tag_bytes": 6400,
+      "manifest_bytes": 27392,
+      "overhead_bytes": 33792,
+      "overhead_bytes_per_block": 84.48,
+      "overhead_percent": 0.0322265625,
+      "encrypt_seconds": 0.21923831466666854
+    },
+    {
+      "block_size_bytes": 1048576,
+      "blocks": 100,
+      "tag_bytes": 1600,
+      "manifest_bytes": 7293,
+      "overhead_bytes": 8893,
+      "overhead_bytes_per_block": 88.93,
+      "overhead_percent": 0.008481025695800781,
+      "encrypt_seconds": 0.2210815086666713
+    },
+    {
+      "block_size_bytes": 4194304,
+      "blocks": 25,
+      "tag_bytes": 400,
+      "manifest_bytes": 2268,
+      "overhead_bytes": 2668,
+      "overhead_bytes_per_block": 106.72,
+      "overhead_percent": 0.002544403076171875,
+      "encrypt_seconds": 0.20681836166666775
+    }
+  ],
+  "grant_growth": [
+    {
+      "file_size_bytes": 1024,
+      "recipients": 1,
+      "grant_raw_bytes": 80,
+      "grant_stored_bytes": 299,
+      "issue_seconds": 0.00040030166666819394
+    },
+    {
+      "file_size_bytes": 1024,
+      "recipients": 2,
+      "grant_raw_bytes": 160,
+      "grant_stored_bytes": 598,
+      "issue_seconds": 0.000269321000004652
+    },
+    {
+      "file_size_bytes": 1024,
+      "recipients": 3,
+      "grant_raw_bytes": 240,
+      "grant_stored_bytes": 897,
+      "issue_seconds": 0.0003863469999979922
+    },
+    {
+      "file_size_bytes": 1024,
+      "recipients": 4,
+      "grant_raw_bytes": 320,
+      "grant_stored_bytes": 1196,
+      "issue_seconds": 0.0005363006666717259
+    },
+    {
+      "file_size_bytes": 1024,
+      "recipients": 5,
+      "grant_raw_bytes": 400,
+      "grant_stored_bytes": 1495,
+      "issue_seconds": 0.0006198256666607449
+    },
+    {
+      "file_size_bytes": 104857600,
+      "recipients": 1,
+      "grant_raw_bytes": 80,
+      "grant_stored_bytes": 299,
+      "issue_seconds": 0.00017678766666999005
+    },
+    {
+      "file_size_bytes": 104857600,
+      "recipients": 2,
+      "grant_raw_bytes": 160,
+      "grant_stored_bytes": 598,
+      "issue_seconds": 0.0002549786666653138
+    },
+    {
+      "file_size_bytes": 104857600,
+      "recipients": 3,
+      "grant_raw_bytes": 240,
+      "grant_stored_bytes": 897,
+      "issue_seconds": 0.00038483599999968493
+    },
+    {
+      "file_size_bytes": 104857600,
+      "recipients": 4,
+      "grant_raw_bytes": 320,
+      "grant_stored_bytes": 1196,
+      "issue_seconds": 0.00047832733333545246
+    },
+    {
+      "file_size_bytes": 104857600,
+      "recipients": 5,
+      "grant_raw_bytes": 400,
+      "grant_stored_bytes": 1495,
+      "issue_seconds": 0.0006176119999944755
+    }
+  ],
+  "end_to_end": [
+    {
+      "file_size_bytes": 1024,
+      "upload_seconds": 0.020242584333331592,
+      "upload_mib_per_second": null,
+      "download_seconds": 0.009038845333331361,
+      "download_mib_per_second": null
+    },
+    {
+      "file_size_bytes": 1048576,
+      "upload_seconds": 0.027065945999998082,
+      "upload_mib_per_second": 36.94679653909274,
+      "download_seconds": 0.011500362333331774,
+      "download_mib_per_second": 86.95378206490732
+    },
+    {
+      "file_size_bytes": 10485760,
+      "upload_seconds": 0.10445903699999803,
+      "upload_mib_per_second": 95.7313056600377,
+      "download_seconds": 0.06522587500000061,
+      "download_mib_per_second": 153.3133898165399
+    },
+    {
+      "file_size_bytes": 104857600,
+      "upload_seconds": 1.0473534549999972,
+      "upload_mib_per_second": 95.47875124926213,
+      "download_seconds": 0.6136702173333362,
+      "download_mib_per_second": 162.95397295723993
+    }
+  ]
+}

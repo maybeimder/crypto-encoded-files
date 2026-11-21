@@ -1,0 +1,63 @@
+# Tres piezas independientes:
+#   docker compose up -d                  todo: servidor + web + cliente de terminal
+#   docker compose up -d server           solo el servidor              → http://<IP>:8000
+#   docker compose up -d web              solo la interfaz web (HTTPS)  → https://<IP>:8765
+#   docker compose up -d client           solo el cliente de terminal   → docker compose exec client cryptostore …
+#   docker compose down                   detener todo (los datos quedan en los volúmenes)
+#   docker compose run --rm bench         mediciones en ./docs
+#
+# Configuración: copie .env.example a .env y ajústelo (Docker Compose lo lee solo).
+# Las mismas variables sirven sin Docker; aquí solo cambian los valores por defecto
+# (dentro de Docker se escucha en 0.0.0.0 y la web usa HTTPS salvo que se indique lo contrario).
+
+x-image: &image
+  image: cryptostore:latest
+  build: .
+
+services:
+  # Almacén de objetos cifrados. Solo ve bloques opacos: se puede exponer a la red
+  server:
+    <<: *image
+    command: ["cryptostore-server", "--host", "0.0.0.0", "--port", "8000", "--data-dir", "/data"]
+    # CRYPTOSTORE_HOST: IP de este equipo donde publicarlo (0.0.0.0 = todas)
+    ports: ["${CRYPTOSTORE_HOST:-0.0.0.0}:${CRYPTOSTORE_PORT:-8000}:8000"]
+    volumes: ["server-data:/data"]
+    restart: unless-stopped
+
+  # Interfaz web con login. Aquí se descifra: quien la use desde otro equipo confía en este
+  web:
+    <<: *image
+    command: ["cryptostore", "web", "--users-dir", "/users", "--host", "0.0.0.0", "--port", "8765"]
+    environment:
+      CRYPTOSTORE_SERVER_URL: ${CRYPTOSTORE_SERVER_URL:-http://server:8000}
+      # "privadas" incluye la red interna de Docker, por donde llegan las conexiones desde este mismo equipo
+      CRYPTOSTORE_WEB_ALLOW_FROM: ${CRYPTOSTORE_WEB_ALLOW_FROM:-privadas}
+      CRYPTOSTORE_WEB_TLS: ${CRYPTOSTORE_WEB_TLS:-1}
+      CRYPTOSTORE_WEB_ALLOWED_HOSTS: ${CRYPTOSTORE_WEB_ALLOWED_HOSTS:-}
+      CRYPTOSTORE_WEB_IDLE_MINUTES: ${CRYPTOSTORE_WEB_IDLE_MINUTES:-30}
+    ports: ["${CRYPTOSTORE_WEB_HOST:-0.0.0.0}:${CRYPTOSTORE_WEB_PORT:-8765}:8765"]
+    volumes: ["users:/users"]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    restart: unless-stopped
+
+  # Cliente solo terminal: queda en marcha para ejecutar comandos dentro
+  #   docker compose exec client cryptostore --home /users/alice init --name alice --server http://server:8000
+  # ./ se monta en /work para subir y bajar archivos de esta carpeta
+  client:
+    <<: *image
+    command: ["sleep", "infinity"]
+    init: true
+    working_dir: /work
+    volumes: ["users:/users", "./:/work"]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    restart: unless-stopped
+
+  bench:
+    <<: *image
+    profiles: ["tools"]
+    command: ["cryptostore-bench", "--output-dir", "/work/docs"]
+    volumes: ["./:/work"]
+
+volumes:
+  server-data:
+  users:

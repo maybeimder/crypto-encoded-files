@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>cryptostore</title>
+  <link rel="stylesheet" href="/static/style.css?v=7">
+</head>
+<body>
+  <div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <header class="topbar">
+    <div class="wordmark"><span id="wordmark-text">$tore</span><span class="caret" aria-hidden="true"></span></div>
+    <div id="identity-chip" class="identity-chip" hidden>
+      <span id="identity-name"></span><span class="badge server" id="identity-server" title="Servidor"></span>
+    </div>
+    <button type="button" id="lock-button" class="button ghost" hidden><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10"/></svg>Salir</button>
+  </header>
+
+  <main>
+    <!-- Entrar: la contraseña descifra en este equipo las claves privadas del usuario -->
+    <section id="login-view" class="card narrow" hidden>
+      <h1>Entrar</h1>
+      <p class="muted">Tu contraseña no sale de este equipo.</p>
+      <form id="login-form" class="stack">
+        <label>Usuario <input name="username" required autocomplete="username" autocapitalize="none" spellcheck="false"></label>
+        <label>Contraseña <input name="passphrase" type="password" required autocomplete="current-password"></label>
+        <p class="form-error" role="alert"></p>
+        <button class="button primary">Entrar</button>
+      </form>
+      <button type="button" class="link auth-switch" data-show="register">¿Sin cuenta? Crear una</button>
+    </section>
+
+    <!-- Crear cuenta: equivalente a `cryptostore init` -->
+    <section id="register-view" class="card narrow" hidden>
+      <h1>Crear cuenta</h1>
+      <p class="muted">Tus claves se generan aquí.</p>
+      <form id="register-form" class="stack">
+        <label>Usuario <input name="username" required pattern="[a-z0-9][a-z0-9_\-]{0,31}" autocomplete="username" autocapitalize="none" spellcheck="false" aria-describedby="username-hint"></label>
+        <p class="hint" id="username-hint">minúsculas, números, - y _ · hasta 32</p>
+        <label>Servidor <input name="server_url" required value="http://127.0.0.1:8000"></label>
+        <label>Contraseña <input name="passphrase" type="password" required minlength="8" autocomplete="new-password"></label>
+        <label>Repetir contraseña <input name="passphrase_again" type="password" required minlength="8" autocomplete="new-password"></label>
+        <p class="form-error" role="alert"></p>
+        <button class="button primary">Crear cuenta</button>
+      </form>
+      <button type="button" class="link auth-switch" data-show="login">Ya tengo cuenta</button>
+    </section>
+
+    <div id="main-view" class="layout" hidden>
+      <div class="primary-column">
+        <button type="button" id="drop-zone" class="drop-zone" aria-label="Subir archivo: elegir o soltar aquí">
+          <pre class="glyphs" id="drop-glyphs" aria-hidden="true"></pre>
+          <span class="drop-label" id="drop-label">Suelta un archivo</span>
+          <span class="drop-hint">o haz clic · máx. 100 MiB</span>
+        </button>
+        <input id="file-input" type="file" hidden>
+
+        <section class="ledger" aria-label="Archivos">
+          <div class="ledger-head">
+            <h2>archivos</h2><span class="count" id="file-count"></span><span class="rule-line"></span>
+            <div class="seg" role="group" aria-label="Filtrar archivos">
+              <button type="button" class="seg-btn" data-filter="all" aria-pressed="true">Todos</button>
+              <button type="button" class="seg-btn" data-filter="mine" aria-pressed="false">Míos</button>
+              <button type="button" class="seg-btn" data-filter="shared" aria-pressed="false">Conmigo</button>
+            </div>
+            <button type="button" id="sort-size" class="seg-btn sort" data-order="none" aria-label="Ordenar por tamaño: sin orden"></button>
+          </div>
+          <ul id="file-rows" class="files-list"></ul>
+          <p id="files-empty" class="empty" hidden>Sin archivos todavía.</p>
+        </section>
+      </div>
+
+      <aside class="side">
+        <details class="panel" id="fingerprint-panel">
+          <summary>tu huella <span class="tag">· cuídala</span></summary>
+          <div class="panel-body">
+            <div id="own-fingerprint" class="fingerprint"></div>
+            <button type="button" id="copy-own" class="button small"></button>
+          </div>
+        </details>
+
+        <details class="panel" id="contacts-panel">
+          <summary>contactos <span class="count" id="contact-count"></span></summary>
+          <div class="panel-body">
+            <ul id="contact-list" class="plain-list"></ul>
+            <button type="button" id="add-contact" class="button accent" aria-expanded="false" aria-controls="trust-form"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Registrar nuevo contacto</button>
+            <form id="trust-form" class="stack compact" hidden>
+              <label>Alias <input name="alias" required autocomplete="off"></label>
+              <label>Huella dictada <input name="fingerprint" required autocomplete="off" placeholder="1a2b 3c4d …"></label>
+              <button class="button"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5 9-10"/></svg>Verificar y fijar</button>
+            </form>
+          </div>
+        </details>
+
+      </aside>
+    </div>
+  </main>
+
+  <!-- Antes de descargar, compartir o revocar se vuelve a pedir la contraseña -->
+  <dialog id="confirm-dialog" class="card dialog" aria-labelledby="confirm-title">
+    <form method="dialog" class="stack" id="confirm-form">
+      <h2 id="confirm-title">Confirma con tu contraseña</h2>
+      <p class="muted" id="confirm-detail"></p>
+      <label>Contraseña <input name="passphrase" type="password" required autocomplete="current-password"></label>
+      <div class="row end">
+        <button type="button" class="button ghost" id="confirm-cancel">Cancelar</button>
+        <button class="button primary" value="confirm" id="confirm-submit">Confirmar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Cada acción imprime aquí el comando de terminal equivalente y su salida. Fija abajo, como en un IDE -->
+  <details class="terminal" id="terminal-panel">
+    <summary><span>terminal</span><button type="button" id="clear-log" class="link">limpiar</button></summary>
+    <pre id="terminal-log" aria-live="polite" aria-label="Registro de comandos equivalentes"></pre>
+  </details>
+
+  <script src="/static/app.js?v=7"></script>
+</body>
+</html>
